@@ -9,6 +9,9 @@ const renderDocument = (title: string, description: string, bodyHtml: string) =>
     <meta property="og:title" content="${title}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="${title}" />
+    <meta name="twitter:description" content="${description}" />
     <link rel="stylesheet" href="/static/styles.css" />
     <script src="/static/js/gallery.js" defer></script>
     <script src="/static/js/entrance.js" defer></script>
@@ -220,12 +223,27 @@ export const behindScenesPageHtml = renderDocument(
 );
 
 export const journalEntryPageHtml = (slug: string) => {
-  const entry = journalEntries.find((item) => item.slug === slug) ??
-    journalEntries[0];
+  const entryIndex = Math.max(
+    0,
+    journalEntries.findIndex((item) => item.slug === slug),
+  );
+  const entry = journalEntries[entryIndex];
+  const previous = journalEntries[entryIndex - 1];
+  const next = journalEntries[entryIndex + 1];
+  const navigation =
+    `<nav class="article-nav" aria-label="Journal navigation">${
+      previous
+        ? `<a class="panel-link" href="/journal/${previous.slug}">← ${previous.title}</a>`
+        : "<span></span>"
+    }${
+      next
+        ? `<a class="panel-link" href="/journal/${next.slug}">${next.title} →</a>`
+        : "<span></span>"
+    }</nav>`;
   return renderDocument(
     `${entry.title} | PAIXX`,
     entry.excerpt,
-    `<div class="page-shell"><main class="detail-page journal-entry"><p class="eyebrow">${entry.category}</p><h1>${entry.title}</h1><p class="journal-meta"><time datetime="${entry.date}">${entry.date}</time><span>${entry.readTime}</span></p><p class="hero-text">${entry.excerpt}</p><div class="article-body"><p>PAIXX is interested in the space between struggle and stillness—the decisions, rituals, and objects that help us move through it.</p><p>This dispatch is part of the ongoing archive. More writing, imagery, and field notes will join it as the collection grows.</p></div><a class="panel-link" href="/journal">← Back to journal</a></main></div>`,
+    `<div class="page-shell"><main class="detail-page journal-entry"><p class="eyebrow">${entry.category}</p><h1>${entry.title}</h1><p class="journal-meta"><time datetime="${entry.date}">${entry.date}</time><span>${entry.readTime}</span></p><p class="hero-text">${entry.excerpt}</p><div class="article-body"><p>PAIXX is interested in the space between struggle and stillness—the decisions, rituals, and objects that help us move through it.</p><p>This dispatch is part of the ongoing archive. More writing, imagery, and field notes will join it as the collection grows.</p></div>${navigation}<a class="panel-link" href="/journal">← Back to journal</a></main></div>`,
   );
 };
 

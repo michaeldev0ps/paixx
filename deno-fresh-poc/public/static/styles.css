@@ -584,6 +584,20 @@ button {
   line-height: 1.9;
   margin: 0 0 1.5rem;
 }
+.article-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 700px) {
+  .article-nav {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 .journal-meta {
   display: flex;
   gap: 1rem;
