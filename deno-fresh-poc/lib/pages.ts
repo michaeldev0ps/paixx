@@ -123,11 +123,11 @@ export const signInPageHtml = renderDocument(
           <form class="panel-card" method="POST" action="/signin">
             <label>
               Email
-              <input type="email" name="email" placeholder="you@example.com" />
+              <input id="signin-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" />
             </label>
             <label>
               Password
-              <input type="password" name="password" placeholder="Enter password" />
+              <input id="signin-password" type="password" name="password" autocomplete="current-password" placeholder="Enter password" aria-label="Password" />
             </label>
             <button type="submit">Continue</button>
           </form>
@@ -183,7 +183,7 @@ export const productDetailPageHtml = (slug: string) => {
   return renderDocument(
     `${product.name} | PAIXX`,
     `${product.name} from PAIXX.`,
-    `<div class="page-shell"><header class="site-header"><a class="wordmark" href="/">PAIXX</a><nav><a href="/collections">Collections</a><a href="/signin">Sign in</a></nav></header><main class="detail-page product-detail"><p class="eyebrow">Product study</p><h1>${product.name}</h1><p class="hero-text">${product.material}. Designed for movement, built for repeat wear.</p><div class="product-gallery" data-gallery><button class="gallery-panel is-active" data-gallery-panel="0">Editorial image</button><button class="gallery-panel" data-gallery-panel="1">Detail image</button></div><div class="gallery-controls" aria-label="Product gallery"><button type="button" data-gallery-button="0">01</button><button type="button" data-gallery-button="1">02</button></div><div class="product-meta"><p>${product.priceLabel}</p><a class="editorial-cta" href="/checkout?product=${product.slug}">Request access ↗</a></div><a class="panel-link" href="/collections/${product.collection}">← Back to chapter</a></main></div>`,
+    `<div class="page-shell"><header class="site-header"><a class="wordmark" href="/">PAIXX</a><nav><a href="/collections">Collections</a><a href="/signin">Sign in</a></nav></header><main class="detail-page product-detail"><p class="eyebrow">Product study</p><h1>${product.name}</h1><p class="hero-text">${product.material}. Designed for movement, built for repeat wear.</p><div class="product-gallery" data-gallery aria-label="${product.name} image gallery"><button type="button" class="gallery-panel is-active" data-gallery-panel="0" aria-label="Show editorial image">Editorial image</button><button type="button" class="gallery-panel" data-gallery-panel="1" aria-label="Show detail image">Detail image</button></div><div class="gallery-controls" aria-label="Product gallery controls"><button type="button" data-gallery-button="0" aria-label="Show image 1">01</button><button type="button" data-gallery-button="1" aria-label="Show image 2">02</button></div><div class="product-meta"><p>${product.priceLabel}</p><a class="editorial-cta" href="/checkout?product=${product.slug}">Request access ↗</a></div><a class="panel-link" href="/collections/${product.collection}">← Back to chapter</a></main></div>`,
   );
 };
 
