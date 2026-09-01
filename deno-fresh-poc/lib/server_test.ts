@@ -109,3 +109,10 @@ Deno.test("returns 404 for unknown routes", async () => {
   expectStatus(response.status, 404);
   expectIncludes(await response.text(), "Not found");
 });
+
+Deno.test("rejects malformed dynamic slugs", async () => {
+  const response = await handleRequest()(
+    new Request("http://localhost/products/%2F%2E%2E%2F"),
+  );
+  expectStatus(response.status, 404);
+});
