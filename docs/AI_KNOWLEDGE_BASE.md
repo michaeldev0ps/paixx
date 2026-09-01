@@ -529,6 +529,8 @@ Confirmed completed:
 - Deno Phase 1 foundation documentation exists
 - Supabase placeholder client exists
 - Deno route smoke tests exist and pass
+- Route validation now rejects malformed product and Journal slugs
+- Supabase placeholder credentials fail fast when the required environment is absent
 - Git repository has commits
 
 Evidence:
@@ -806,7 +808,7 @@ Not yet tested:
 - Fresh route behavior
 - Supabase connectivity
 - Deployment
-- Automated tests as a repeatable suite
+- Supabase connectivity
 - Auto fallback behavior when network is unavailable but Deno is installed
 
 Current runtime availability:
