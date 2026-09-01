@@ -26,6 +26,7 @@ Current maturity:
 - Early foundation stage
 - Deno proof of concept exists
 - Landing page baseline exists
+- Landing page now includes hero, story, collections, and footer
 - Core ecommerce, auth, database, checkout, CMS, and payments are not implemented
 
 ---
@@ -77,7 +78,7 @@ Older documentation describes Next.js as the intended stack. Current project dir
 
 ### Active Technology
 
-- Runtime: Deno
+- Runtime: Deno 2.9.5 is available locally through WinGet
 - Language: TypeScript
 - Framework: no full Fresh app router is active yet
 - Frontend: server-rendered HTML templates from TypeScript
@@ -128,19 +129,22 @@ Current structure:
 - `online.ts` - online server implementation using remote Deno std import
 - `run.ts` - automatic online/offline selector
 - `run.ps1` - Windows proxy-aware launcher
+- `lib/server.ts` - shared request handler for active manual routes
 - `lib/pages.ts` - HTML document and page templates
 - `lib/supabase.ts` - placeholder Supabase client
+- `lib/server_test.ts` - repeatable route smoke tests
 - `static/styles.css` - page styling
 - `routes/` - Fresh-style route files from earlier scaffolding; not active in current runtime
 
 Current request flow:
 
-1. Request enters Deno server.
-2. Server checks `url.pathname`.
-3. `/` returns `homePageHtml`.
-4. `/signin` returns `signInPageHtml`.
-5. `/static/styles.css` reads and returns CSS.
-6. Unknown paths return `404`.
+1. Request enters `main.ts` or `online.ts`.
+2. Runtime entrypoint delegates to `handleRequest()` from `lib/server.ts`.
+3. Handler checks `url.pathname`.
+4. `/` returns `homePageHtml`.
+5. `/signin` returns `signInPageHtml`.
+6. `/static/styles.css` reads and returns CSS.
+7. Unknown paths return `404`.
 
 Rendering:
 
@@ -212,8 +216,7 @@ What has migrated:
 
 Incomplete:
 
-- Deno runtime not currently available locally
-- POC not fully validated
+- Full POC validation is partially complete
 - Fresh routing not active
 - API/service architecture not complete
 - Supabase integration not active
@@ -283,6 +286,7 @@ Current sections:
 - Hero
 - Brand/story section
 - Collection preview cards
+- Footer
 
 Current routes:
 
@@ -305,7 +309,6 @@ Must be preserved:
 
 Incomplete:
 
-- Footer is listed in roadmap Phase 2 and may still need implementation
 - No real products
 - No product media
 - No data-backed collections
@@ -369,7 +372,7 @@ Major features:
 
 Current status:
 
-In progress.
+Implemented at baseline level; still needs visual/product approval before moving beyond foundation.
 
 Dependencies:
 
@@ -520,10 +523,12 @@ Confirmed completed:
 - Proxy-aware launcher exists
 - Runtime discovery convention documented
 - Landing page baseline exists
+- Landing page footer exists
 - Sign-in placeholder exists
 - Static CSS exists
 - Deno Phase 1 foundation documentation exists
 - Supabase placeholder client exists
+- Deno route smoke tests exist and pass
 - Git repository has commits
 
 Evidence:
@@ -543,24 +548,12 @@ Evidence:
 
 ### Blockers
 
-- Deno is not installed or not on PATH
-- No local Deno binary found during prior validation
-- Direct network access to Deno/GitHub previously failed
-- Saved proxy was previously not reachable
-- Deno POC cannot be fully validated until runtime exists
+- Authoritative architecture docs still need formal Deno-first reconciliation
+- Full phase completion still needs route architecture clarity before additional pages are added
 
 ### Normal Engineering Tasks
 
-- Validate Deno tasks
-- Validate `/`
-- Validate `/signin`
-- Validate `/static/styles.css`
-- Validate offline mode
-- Validate online mode when network/proxy exists
-- Validate proxy-aware launcher
 - Decide route structure before adding more pages
-- Add footer if still missing from Phase 2
-- Add minimal tests once runtime is available
 - Reconcile Deno-first documentation
 
 ### Founder Decisions
@@ -729,19 +722,19 @@ Development constraints:
 
 ## 13. Known Problems
 
-### Deno Unavailable Locally
+### Deno Runtime Was Previously Unavailable
 
-- Severity: high
-- Cause: `deno` not installed or not on PATH
-- Impact: current canonical runtime cannot be validated
-- Recommended resolution: install Deno, set `PAIXX_DENO_EXE`, or place `deno.exe` at `paixx/.tools/deno/deno.exe`
+- Severity: resolved
+- Cause: `deno` was previously not discoverable
+- Impact: previously blocked runtime validation
+- Recommended resolution: continue using local Deno 2.9.5 through WinGet, or use `PAIXX_DENO_EXE` / `paixx/.tools/deno/deno.exe` if the PATH changes
 
-### Network/Proxy Unavailable
+### Network/Proxy State Changed
 
-- Severity: high for install and online validation
-- Cause: no active VPN/proxy during prior validation
-- Impact: cannot download Deno or validate online remote import mode
-- Recommended resolution: enable network/VPN/proxy or provide portable Deno binary manually
+- Severity: low to medium
+- Cause: network was previously unavailable, but GitHub and Deno online mode were reachable during later validation
+- Impact: online mode currently works, but proxy/VPN conditions may recur
+- Recommended resolution: keep proxy-aware launcher and preserve offline mode
 
 ### Documentation Conflict Around Stack
 
@@ -795,34 +788,39 @@ Previously tested or inspected:
 - Repository structure audited
 - Deno POC files inspected
 - Git status inspected
-- Deno availability checked
+- Deno availability checked and confirmed with Deno 2.9.5
 - Launcher failure mode checked
 - Network/proxy reachability checked
 - Launcher hardened to fail cleanly when Deno is missing
+- Offline server started through `run.ps1`
+- Auto mode started through `run.ps1`
+- Auto mode selected online mode when network was reachable
+- `/` returned `200 OK`
+- `/signin` returned `200 OK`
+- `/static/styles.css` returned `200 OK`
+- Unknown route returned `404 Not Found`
+- Repeatable Deno route smoke tests passed with `deno task test`
 
 Not yet tested:
 
-- Running Deno server
-- `/` route response
-- `/signin` route response
-- `/static/styles.css` route response
-- Online mode
-- Auto fallback behavior with actual Deno
 - Fresh route behavior
 - Supabase connectivity
 - Deployment
-- Automated tests
+- Automated tests as a repeatable suite
+- Auto fallback behavior when network is unavailable but Deno is installed
 
 Current runtime availability:
 
-- Deno was not available locally during prior validation.
+- Deno 2.9.5 is available locally.
 
 Known validation failures:
 
-- `deno --version` failed because command was not found.
-- Deno task validation was blocked by missing Deno.
-- Direct network checks to Deno/GitHub previously failed.
+- Earlier `deno --version` failed because command was not found; later validation passed.
+- Earlier Deno task validation was blocked by missing Deno; later task discovery passed.
+- Earlier direct network checks failed; later GitHub and online-mode validation passed.
 - Saved proxy check previously failed because proxy was unreachable.
+- `run.ts` previously failed with an illegal top-level `return`; this was fixed.
+- `run.ps1` and `deno.json` previously lacked `--allow-env` despite reading `PORT`; this was fixed.
 
 Relevant validation commands:
 
@@ -939,19 +937,19 @@ AI agents should:
 
 ## 18. Current Handoff
 
-CURRENT PRODUCT PHASE: Phase 2 - Landing Page
+CURRENT PRODUCT PHASE: Phase 3/4 presentation foundation (commerce and CMS remain gated)
 
 CURRENT MIGRATION PHASE: Deno Phase 1 - Foundation
 
-CURRENT OBJECTIVE: Validate and stabilize the Deno foundation while preserving the existing landing page baseline.
+CURRENT OBJECTIVE: Validate and refine presentation-safe product, checkout-preview, Journal, and Behind-the-Scenes routes while preserving the Deno-first foundation.
 
-CURRENT BLOCKERS: Deno is not installed/on PATH; network/proxy previously unavailable for download/online validation; architecture docs still contain old Next.js direction.
+CURRENT BLOCKERS: Real authentication, payments, orders, CMS, and production product data require founder decisions; authoritative legacy docs still describe Next.js; local branch contains substantial pre-existing untracked scaffold work.
 
-NEXT ENGINEERING STEP: Provide or install Deno, then validate `run.ps1`, Deno tasks, `/`, `/signin`, `/static/styles.css`, offline mode, and online/auto behavior when network is available.
+NEXT ENGINEERING STEP: Continue responsive/accessibility validation and route hardening; then prepare a Deno-first architecture reconciliation proposal for founder approval.
 
-NEXT PRODUCT MILESTONE: Complete Phase 2 Landing Page, including preserving/refining hero, story, collections, and footer after Deno foundation validation.
+NEXT PRODUCT MILESTONE: Founder-approved product catalog and business rules, followed by a real product data boundary and gated commerce implementation.
 
-FOUNDER DECISIONS REQUIRED: Formal Deno-first documentation approval, landing page copy/brand approval, deployment target confirmation, and approval before destructive cleanup or later auth/payment/product business-rule work.
+FOUNDER DECISIONS REQUIRED: Product catalog/pricing, payment provider, shipping/returns/tax rules, authentication approval, launch domain, final brand/content approval, and formal Deno-first documentation approval.
 
 ---
 
