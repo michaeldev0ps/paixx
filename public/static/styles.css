@@ -45,10 +45,6 @@ body {
   justify-content: center;
   position: relative;
 }
-.home-shell {
-  padding-top: calc(var(--gutter) + 100vh);
-}
-
 .monolithic-entrance {
   min-height: 100vh;
   width: 100%;
@@ -125,6 +121,11 @@ body {
   justify-content: space-between;
 }
 
+.home-shell .site-header {
+  position: fixed;
+  z-index: 9;
+}
+
 .wordmark {
   color: var(--text);
   font-size: 1.15rem;
@@ -154,7 +155,7 @@ nav a:focus-visible {
   grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
   gap: 2rem;
   align-items: center;
-  margin-top: 5rem;
+  margin-top: 6rem;
   position: relative;
 }
 
@@ -759,7 +760,7 @@ button {
 
   .hero {
     grid-template-columns: 1fr;
-    margin-top: 5.5rem;
+    margin-top: 7rem;
   }
 
   .collection-grid {

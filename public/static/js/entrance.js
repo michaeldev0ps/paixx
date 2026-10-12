@@ -1,6 +1,6 @@
 const entrance = document.querySelector(".monolithic-entrance");
 if (entrance) {
-  const fractureAt = entrance.offsetHeight * 0.35;
+  const fractureAt = Math.min(entrance.offsetHeight * 0.05, 48);
   const update = () => {
     if (window.scrollY > fractureAt) entrance.classList.add("is-fractured");
   };
