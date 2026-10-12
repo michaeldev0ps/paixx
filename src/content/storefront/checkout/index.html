@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | PAIXX</title>
+    <meta name="description" content="PAIXX checkout preview." />
+    <meta property="og:title" content="Checkout | PAIXX" />
+    <meta property="og:description" content="PAIXX checkout preview." />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Checkout | PAIXX" />
+    <meta name="twitter:description" content="PAIXX checkout preview." />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/js/gallery.js" defer></script>
+    <script src="/static/js/entrance.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <main class="detail-page checkout-page">
+        <p class="eyebrow">Private access</p>
+        <h1>Complete your request.</h1>
+        <p class="hero-text">
+          Checkout preview while PAIXX finalizes product availability and
+          payments.
+        </p>
+        <div class="checkout-layout">
+          <section class="checkout-summary">
+            <p class="eyebrow">Your selection</p>
+            <h2>PAIXX product access</h2>
+            <p>
+              Availability and pricing will be confirmed personally before any
+              order is placed.
+            </p>
+            <dl>
+              <div>
+                <dt>Access</dt>
+                <dd>Private request</dd>
+              </div>
+              <div>
+                <dt>Payment</dt>
+                <dd>Not collected</dd>
+              </div>
+            </dl>
+          </section>
+          <form class="checkout-form">
+            <label for="checkout-email"
+              >Email<input
+                id="checkout-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+                required /></label
+            ><label for="checkout-size"
+              >Size<select id="checkout-size" name="size" required>
+                <option value="">Select size</option>
+                <option>M</option>
+                <option>L</option>
+                <option>XL</option>
+              </select></label
+            ><button type="button">Request access</button>
+          </form>
+        </div>
+        <p class="checkout-note">
+          No payment is collected in this preview. A PAIXX representative will
+          follow up.
+        </p>
+        <a class="panel-link" href="/products/">← Continue browsing</a>
+      </main>
+    </div>
+  </body>
+</html>

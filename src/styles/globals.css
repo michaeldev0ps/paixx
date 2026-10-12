@@ -1,0 +1,102 @@
+:root {
+  --color-primary: #090909;
+  --color-secondary: #f5f5f5;
+  --color-secondary-muted: #b9b7b5;
+  --color-accent: #7e0e12;
+  --color-accent-soft: #a62a2f;
+  --color-border: #303030;
+  --color-border-strong: #5b5654;
+  --color-surface: #111111;
+  --color-error-surface: #261113;
+  --color-success: #d0d0d0;
+  --color-swatch-border: #8b8886;
+  --font-display: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+  --font-body: Inter, Arial, sans-serif;
+}
+
+html,
+body,
+#__next {
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-primary);
+  color: var(--color-secondary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-soft);
+  outline-offset: 3px;
+}
+
+.home-collection-link {
+  display: inline-block;
+  margin-top: 1.25rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-accent);
+  color: var(--color-secondary);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.home-collection-link:hover {
+  background: var(--color-accent);
+}
+
+.collection001-promo {
+  display: grid;
+  justify-items: start;
+  gap: 0.85rem;
+  width: min(calc(100% - 2.5rem), 1200px);
+  margin: 2rem auto 4rem;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.collection001-promo h2,
+.collection001-promo p {
+  margin: 0;
+}
+
+.collection001-promo h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.collection001-promo > p:not(.eyebrow) {
+  color: var(--color-secondary-muted);
+}
+
+.auth-note {
+  color: var(--color-secondary-muted);
+  font-size: 0.82rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

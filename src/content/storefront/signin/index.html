@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In | PA IXX</title>
+    <meta
+      name="description"
+      content="Sign in to PA IXX for order tracking, account management, and exclusive editorial access."
+    />
+    <meta property="og:title" content="Sign In | PA IXX" />
+    <meta
+      property="og:description"
+      content="Sign in to PA IXX for order tracking, account management, and exclusive editorial access."
+    />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Sign In | PA IXX" />
+    <meta
+      name="twitter:description"
+      content="Sign in to PA IXX for order tracking, account management, and exclusive editorial access."
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/js/gallery.js" defer></script>
+    <script src="/static/js/entrance.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <main class="hero hero-single-column">
+        <section class="hero-copy">
+          <p class="eyebrow">Sign In</p>
+          <h1>Member access for the PA IXX experience.</h1>
+          <p class="hero-text">
+            This page is designed as the first auth step in the Deno prototype.
+            It can be connected to Supabase auth and customer session handling
+            in the next validation phase.
+          </p>
+        </section>
+
+        <aside class="hero-panel">
+          <form class="panel-card" method="POST" action="/signin">
+            <label>
+              Email
+              <input
+                id="signin-email"
+                type="email"
+                name="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+                aria-label="Email address"
+              />
+            </label>
+            <label>
+              Password
+              <input
+                id="signin-password"
+                type="password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="Enter password"
+                aria-label="Password"
+              />
+            </label>
+            <button type="submit">Continue</button>
+          </form>
+        </aside>
+      </main>
+    </div>
+  </body>
+</html>
