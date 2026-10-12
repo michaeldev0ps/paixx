@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import Script from 'next/script';
 import type { StorefrontPageContent } from '../lib/storefront-pages';
 
@@ -14,6 +13,26 @@ export default function StorefrontPage({
   home,
   collection001 = false,
 }: StorefrontPageProps) {
+  let pageHtml = html;
+  if (home && collection001) {
+    const footerPosition = html.toLowerCase().lastIndexOf('<footer');
+    if (footerPosition < 0) {
+      throw new Error('The homepage is missing its footer.');
+    }
+
+    const collectionPromo = `
+      <section class="collection001-promo" aria-label="Collection 001 Rage Hoodie">
+        <p class="eyebrow">The first drop</p>
+        <h2>Collection 001: Rage Hoodie</h2>
+        <p>Black or white. PAIXX logo or Demon. Four ways to wear the war.</p>
+        <a class="editorial-cta" href="/collections/001">
+          Shop Collection 001 <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+    `;
+    pageHtml = `${html.slice(0, footerPosition)}${collectionPromo}${html.slice(footerPosition)}`;
+  }
+
   return (
     <>
       <Head>
@@ -29,17 +48,7 @@ export default function StorefrontPage({
       </Head>
       <Script src="/static/js/gallery.js" strategy="afterInteractive" />
       {home && <Script src="/static/js/entrance.js" strategy="afterInteractive" />}
-      <div dangerouslySetInnerHTML={{ __html: html }} />
-      {home && collection001 && (
-        <section className="collection001-promo" aria-label="Collection 001 Rage Hoodie">
-          <p className="eyebrow">The first drop</p>
-          <h2>Collection 001: Rage Hoodie</h2>
-          <p>Black or white. PAIXX logo or Demon. Four ways to wear the war.</p>
-          <Link className="editorial-cta" href="/collections/001">
-            Shop Collection 001 <span aria-hidden="true">↗</span>
-          </Link>
-        </section>
-      )}
+      <div dangerouslySetInnerHTML={{ __html: pageHtml }} />
     </>
   );
 }

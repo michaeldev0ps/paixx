@@ -16,7 +16,6 @@ export const storefrontRoutes = [
   'products/reckoning-tee',
   'products/ritual-overshirt',
   'products/violence-trouser',
-  'signin',
 ] as const;
 
 export type StorefrontPageContent = {
@@ -58,14 +57,7 @@ export const loadStorefrontPage = async (
     throw new Error(`Storefront page "${route}" is missing its document metadata or body.`);
   }
 
-  const safeHtml = route === 'signin'
-    ? html.replace(
-      '<button type="submit">Continue</button>',
-      '<button type="button" disabled>Continue</button><p class="auth-note">Account access is coming soon. Your details are not submitted or stored.</p>',
-    )
-    : html;
-
-  return { title, description, html: safeHtml, home: false };
+  return { title, description, html, home: false };
 };
 
 export const loadHomePage = async () => {
