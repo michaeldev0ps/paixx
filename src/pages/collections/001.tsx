@@ -23,6 +23,26 @@ import {
 } from '../../lib/collection-001-cart';
 import styles from '../../styles/collection-001.module.css';
 
+function CartIcon({ className }: { className: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M3 4h2l2.3 11.2a2 2 0 0 0 2 1.6h8.9a2 2 0 0 0 2-1.6L22 8H6" />
+      <circle cx="10" cy="20" r="1" />
+      <circle cx="18" cy="20" r="1" />
+    </svg>
+  );
+}
+
 export default function Collection001Page() {
   const [color, setColor] = useState<HoodieColor>('black');
   const [style, setStyle] = useState<HoodieStyle>('paixx');
@@ -145,8 +165,14 @@ export default function Collection001Page() {
           </Link>
           <nav className={styles.navigation} aria-label="Main navigation">
             <Link href="/#collection-001">Collection 001</Link>
-            <a href="#cart" aria-label={`Cart, ${totalItems.toString()} items`}>
-              Cart{' '}
+            <a
+              className={styles.cartLink}
+              href="#cart"
+              aria-label={`Cart, ${totalItems.toString()} ${
+                totalItems === 1n ? 'item' : 'items'
+              }`}
+            >
+              <CartIcon className={styles.cartIcon} />
               <span className={styles.cartCount}>{totalItems.toString()}</span>
             </a>
           </nav>
@@ -276,7 +302,18 @@ export default function Collection001Page() {
           <div className={styles.cartHeader}>
             <div>
               <p className={styles.eyebrow}>Your selection</p>
-              <h2 id="cart-title">Cart ({totalItems.toString()})</h2>
+              <h2 className={styles.cartTitle} id="cart-title">
+                <span className={styles.visuallyHidden}>Cart</span>
+                <CartIcon className={styles.cartHeadingIcon} />
+                <span
+                  className={styles.cartHeadingCount}
+                  aria-label={`${totalItems.toString()} ${
+                    totalItems === 1n ? 'item' : 'items'
+                  }`}
+                >
+                  ({totalItems.toString()})
+                </span>
+              </h2>
             </div>
             {cart.length > 0 && (
               <button className={styles.textButton} type="button" onClick={clearCart}>
