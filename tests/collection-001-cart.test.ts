@@ -14,7 +14,7 @@ describe('Collection 001 cart', () => {
     const second = addCartItem(first.lines, 'black-paixx', 3);
     expect(second).toEqual({
       ok: true,
-      lines: [{ variantId: 'black-paixx', quantity: 5 }],
+      lines: [{ variantId: 'black-paixx', size: null, quantity: 5 }],
     });
   });
 
@@ -26,8 +26,8 @@ describe('Collection 001 cart', () => {
     expect(addCartItem(first.lines, 'white-demon', 2)).toEqual({
       ok: true,
       lines: [
-        { variantId: 'black-paixx', quantity: 1 },
-        { variantId: 'white-demon', quantity: 2 },
+        { variantId: 'black-paixx', size: null, quantity: 1 },
+        { variantId: 'white-demon', size: null, quantity: 2 },
       ],
     });
   });
@@ -47,7 +47,7 @@ describe('Collection 001 cart', () => {
       ),
     ).toEqual({
       ok: true,
-      lines: [{ variantId: 'black-paixx', quantity: 5 }],
+      lines: [{ variantId: 'black-paixx', size: null, quantity: 5 }],
     });
 
     expect(

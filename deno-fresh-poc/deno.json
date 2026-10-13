@@ -1,0 +1,15 @@
+{
+  "importMap": "./import_map.json",
+  "compilerOptions": {
+    "lib": ["deno.ns", "dom"],
+    "module": "esnext"
+  },
+  "tasks": {
+    "build": "deno run --allow-read --allow-write build.ts",
+    "dev:offline": "deno run --allow-net --allow-read --allow-env main.ts",
+    "dev:online": "deno run --allow-net --allow-read --allow-env online.ts",
+    "dev": "deno run --allow-net --allow-read --allow-env run.ts",
+    "start": "deno run --allow-net --allow-read --allow-env run.ts",
+    "test": "deno test --allow-read --allow-env"
+  }
+}

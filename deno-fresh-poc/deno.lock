@@ -1,0 +1,7 @@
+{
+  "version": "5",
+  "remote": {
+    "https://deno.land/std@0.205.0/async/delay.ts": "a6142eb44cdd856b645086af2b811b1fcce08ec06bb7d50969e6a872ee9b8659",
+    "https://deno.land/std@0.205.0/http/server.ts": "1aebcfb61a5918b15af128e32adbcea166fa28e02c53d544b41e39d2c6cfa24b"
+  }
+}

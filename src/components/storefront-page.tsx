@@ -1,3 +1,4 @@
+import React from 'react';
 import Head from 'next/head';
 import Script from 'next/script';
 import AccountNavStatus from './account-nav-status';
@@ -51,9 +52,18 @@ export default function StorefrontPage({
         <link rel="stylesheet" href="/static/styles.css" />
       </Head>
       <Script src="/static/js/gallery.js" strategy="afterInteractive" />
+      <Script src="/static/js/size-selector.js" strategy="afterInteractive" />
       {home && <Script src="/static/js/entrance.js" strategy="afterInteractive" />}
       <div dangerouslySetInnerHTML={{ __html: pageHtml }} />
+      {/* Hydrate the React SizeSelector into legacy placeholders on the client only */}
+      {/* dynamic import to avoid SSR errors */}
+      <React.Suspense fallback={null}>
+        {/* Importing dynamically to keep SSR off; Next will strip this on server */}
+        {/* eslint-disable-next-line react/no-unknown-property */}
+        {typeof window !== 'undefined' ? require('./size-selector-hydrator').default() : null}
+      </React.Suspense>
       <AccountNavStatus />
     </>
   );
 }
+

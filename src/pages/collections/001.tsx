@@ -9,6 +9,7 @@ import {
   getHoodieVariantForOptions,
   hoodieVariants,
   type HoodieColor,
+  type ProductSize,
   type HoodieStyle,
   type HoodieVariant,
 } from '../../data/collection-001';
@@ -47,17 +48,23 @@ function CartIcon({ className }: { className: string }) {
 export default function Collection001Page() {
   const [color, setColor] = useState<HoodieColor>('black');
   const [style, setStyle] = useState<HoodieStyle>('paixx');
+  const [size, setSize] = useState<ProductSize | null>(null);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const [quantity, setQuantity] = useState('1');
   const [cart, setCart] = useState<CartLine[]>([]);
   const [cartLoaded, setCartLoaded] = useState(false);
   const [storageAvailable, setStorageAvailable] = useState(true);
   const [writePending, setWritePending] = useState(false);
   const [cartError, setCartError] = useState('');
+  const [sizeError, setSizeError] = useState('');
   const [storageNotice, setStorageNotice] = useState('');
   const [savedCartInvalid, setSavedCartInvalid] = useState(false);
   const [cartMessage, setCartMessage] = useState('');
 
   const selectedVariant = getHoodieVariantForOptions(color, style);
+  const selectedSizeAvailability = size
+    ? collection001Product.sizing.availability?.[size]
+    : undefined;
   const requestedQuantity = Number(quantity);
   const validQuantity =
     Number.isSafeInteger(requestedQuantity) && requestedQuantity > 0;
@@ -102,13 +109,19 @@ export default function Collection001Page() {
   }, [cart, cartLoaded, storageAvailable, writePending]);
 
   const handleAddToCart = () => {
+    if (!size) {
+      setSizeError('Select a size before adding this item to your cart.');
+      setCartError('');
+      setCartMessage('');
+      return;
+    }
     if (!validQuantity) {
       setCartError('Enter a whole quantity of at least one.');
       setCartMessage('');
       return;
     }
 
-    const result = addCartItem(cart, selectedVariant.id, requestedQuantity);
+    const result = addCartItem(cart, selectedVariant.id, size, requestedQuantity);
     if (!result.ok) {
       setCartError(result.message);
       setCartMessage('');
@@ -123,8 +136,12 @@ export default function Collection001Page() {
     );
   };
 
-  const handleQuantityChange = (variantId: CartLine['variantId'], next: number) => {
-    const result = changeCartQuantity(cart, variantId, next);
+  const handleQuantityChange = (
+    variantId: CartLine['variantId'],
+    lineSize: ProductSize | null,
+    next: number,
+  ) => {
+    const result = changeCartQuantity(cart, variantId, lineSize, next);
     if (!result.ok) {
       setCartError(result.message);
       return;
@@ -263,6 +280,87 @@ export default function Collection001Page() {
               </div>
             </fieldset>
 
+            <fieldset className={styles.optionGroup}>
+              <legend>
+                Size <span>{size ?? 'Select a size'}</span>
+              </legend>
+              <div
+                className={styles.optionButtons}
+                role="group"
+                aria-label={`${collection001Product.name} size`}
+                aria-describedby="size-availability-note"
+              >
+                {collection001Product.sizing.options.map((option) => (
+                  <button
+                    className={`${styles.sizeOption} ${
+                      size === option ? styles.selectedOption : ''
+                    }`}
+                    type="button"
+                    key={option}
+                    aria-pressed={size === option}
+                    disabled={collection001Product.sizing.availability?.[option] === 'unavailable'}
+                    onClick={() => {
+                      setSize(option);
+                      setSizeError('');
+                    }}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+              <p className={styles.sizeAvailability} id="size-availability-note">
+                {selectedSizeAvailability === 'available'
+                  ? `Availability is confirmed for size ${size}.`
+                  : selectedSizeAvailability === 'unavailable'
+                    ? `Size ${size} is not currently available.`
+                    : 'Size options are for selection only; availability has not been confirmed.'}
+              </p>
+              {sizeError && (
+                <p className={styles.quantityError} id="size-error" role="alert">
+                  {sizeError}
+                </p>
+              )}
+              <button
+                className={styles.sizeGuideToggle}
+                type="button"
+                aria-expanded={sizeGuideOpen}
+                aria-controls="size-guide"
+                onClick={() => setSizeGuideOpen((open) => !open)}
+              >
+                Size guide
+                <span aria-hidden="true">{sizeGuideOpen ? '−' : '+'}</span>
+              </button>
+              {sizeGuideOpen && (
+                <div className={styles.sizeGuide} id="size-guide" role="region" aria-label="Size guide">
+                  {collection001Product.sizing.guide ? (
+                    <>
+                      <p>Garment measurements ({collection001Product.sizing.guide.unit})</p>
+                      <dl>
+                        {collection001Product.sizing.guide.measurements.map((measurement) => (
+                          <div key={measurement.label}>
+                            <dt>{measurement.label}</dt>
+                            {collection001Product.sizing.options.map((option) => (
+                              <dd key={option}>
+                                {option}: {measurement.values[option] ?? '—'}
+                              </dd>
+                            ))}
+                          </div>
+                        ))}
+                      </dl>
+                    </>
+                  ) : (
+                    <>
+                      <h2>Official measurements coming soon</h2>
+                      <p>
+                        Check the garment description before ordering. Size availability
+                        has not been confirmed.
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
+            </fieldset>
+
             {!validQuantity && (
               <p className={styles.quantityError} id="quantity-error" role="alert">
                 Enter a whole quantity of at least one.
@@ -355,10 +453,15 @@ export default function Collection001Page() {
                   const variant = getHoodieVariant(line.variantId);
 
                   return (
-                    <li className={styles.cartLine} key={line.variantId}>
+                    <li
+                      className={styles.cartLine}
+                      key={`${line.variantId}:${line.size ?? 'unselected'}`}
+                    >
                       <div>
                         <h3>
                           {variant.colorLabel} · {variant.styleLabel}
+                          {' · '}
+                          {line.size ?? 'Size not selected'}
                         </h3>
                         <p>{formatPrice(variant.priceCents)} each</p>
                       </div>
@@ -369,7 +472,11 @@ export default function Collection001Page() {
                           aria-label={`Decrease ${variant.colorLabel} ${variant.styleLabel} quantity`}
                           disabled={line.quantity <= 1}
                           onClick={() =>
-                            handleQuantityChange(line.variantId, line.quantity - 1)
+                            handleQuantityChange(
+                              line.variantId,
+                              line.size,
+                              line.quantity - 1,
+                            )
                           }
                         >
                           −
@@ -382,7 +489,11 @@ export default function Collection001Page() {
                           type="button"
                           aria-label={`Increase ${variant.colorLabel} ${variant.styleLabel} quantity`}
                           onClick={() =>
-                            handleQuantityChange(line.variantId, line.quantity + 1)
+                            handleQuantityChange(
+                              line.variantId,
+                              line.size,
+                              line.quantity + 1,
+                            )
                           }
                         >
                           +
@@ -391,7 +502,11 @@ export default function Collection001Page() {
                           className={styles.textButton}
                           type="button"
                           onClick={() => {
-                            setCart((items) => removeCartItem(items, line.variantId));
+                            setCart((items) => removeCartItem(
+                              items,
+                              line.variantId,
+                              line.size,
+                            ));
                             setWritePending(true);
                             setCartError('');
                             setCartMessage('');

@@ -13,6 +13,7 @@
     <meta name="twitter:description" content="Shop available PAIXX pieces and preview upcoming releases." />
     <link rel="stylesheet" href="/static/styles.css" />
     <script src="/static/js/gallery.js" defer></script>
+    <script src="/static/js/size-selector.js" defer></script>
     <script src="/static/js/entrance.js" defer></script>
   </head>
   <body>
@@ -30,33 +31,38 @@
         <div class="product-grid">
           <article class="product-card product-card-featured">
             <span class="catalog-index">001</span>
-            <div
+            <button
               class="product-preview"
-              role="img"
-              aria-label="Rage Hoodie in black and white with PAIXX logo or Demon artwork. Hover or focus to preview each style."
+              type="button"
+              data-product-preview
+              aria-label="Play hoodie design preview"
+              aria-pressed="false"
             >
               <div
-                class="product-preview-slide"
+                class="product-preview-slide is-active"
                 style="--preview-index: 0"
                 aria-hidden="true"
               >
                 <img
                   class="product-preview-image"
                   src="/products/collection-001/black-paixx.webp"
+                  srcset="/products/collection-001/black-paixx-480.webp 480w, /products/collection-001/black-paixx-768.webp 768w, /products/collection-001/black-paixx.webp 1152w"
+                  sizes="(max-width: 520px) calc(100vw - 5rem), (max-width: 900px) calc(50vw - 4rem), (max-width: 1200px) calc(25vw - 4rem), 17rem"
                   alt=""
-                  width="1200"
-                  height="800"
-                  loading="lazy"
+                  width="1152"
+                  height="768"
+                  loading="eager"
                   decoding="async"
+                  fetchpriority="high"
                 />
                 <img
                   class="product-preview-reflection"
-                  src="/products/collection-001/black-paixx.webp"
                   alt=""
-                  width="1200"
-                  height="800"
+                  width="1152"
+                  height="768"
                   loading="lazy"
                   decoding="async"
+                  data-preview-reflection
                 />
                 <span class="product-preview-label">Black / PAIXX</span>
               </div>
@@ -67,21 +73,23 @@
               >
                 <img
                   class="product-preview-image"
-                  src="/products/collection-001/black-demon.webp"
+                  data-preview-src="/products/collection-001/black-demon.webp"
+                  data-preview-srcset="/products/collection-001/black-demon-480.webp 480w, /products/collection-001/black-demon-768.webp 768w, /products/collection-001/black-demon.webp 1152w"
+                  data-preview-sizes="(max-width: 520px) calc(100vw - 5rem), (max-width: 900px) calc(50vw - 4rem), (max-width: 1200px) calc(25vw - 4rem), 17rem"
                   alt=""
-                  width="1200"
-                  height="800"
+                  width="1152"
+                  height="768"
                   loading="lazy"
                   decoding="async"
                 />
                 <img
                   class="product-preview-reflection"
-                  src="/products/collection-001/black-demon.webp"
                   alt=""
-                  width="1200"
-                  height="800"
+                  width="1152"
+                  height="768"
                   loading="lazy"
                   decoding="async"
+                  data-preview-reflection
                 />
                 <span class="product-preview-label">Black / Demon</span>
               </div>
@@ -92,21 +100,23 @@
               >
                 <img
                   class="product-preview-image"
-                  src="/products/collection-001/white-paixx.webp"
+                  data-preview-src="/products/collection-001/white-paixx.webp"
+                  data-preview-srcset="/products/collection-001/white-paixx-480.webp 480w, /products/collection-001/white-paixx-768.webp 768w, /products/collection-001/white-paixx.webp 1152w"
+                  data-preview-sizes="(max-width: 520px) calc(100vw - 5rem), (max-width: 900px) calc(50vw - 4rem), (max-width: 1200px) calc(25vw - 4rem), 17rem"
                   alt=""
-                  width="1200"
-                  height="800"
+                  width="1152"
+                  height="768"
                   loading="lazy"
                   decoding="async"
                 />
                 <img
                   class="product-preview-reflection"
-                  src="/products/collection-001/white-paixx.webp"
                   alt=""
-                  width="1200"
-                  height="800"
+                  width="1152"
+                  height="768"
                   loading="lazy"
                   decoding="async"
+                  data-preview-reflection
                 />
                 <span class="product-preview-label">White / PAIXX</span>
               </div>
@@ -117,28 +127,34 @@
               >
                 <img
                   class="product-preview-image"
-                  src="/products/collection-001/white-demon.webp"
+                  data-preview-src="/products/collection-001/white-demon.webp"
+                  data-preview-srcset="/products/collection-001/white-demon-480.webp 480w, /products/collection-001/white-demon-768.webp 768w, /products/collection-001/white-demon.webp 1152w"
+                  data-preview-sizes="(max-width: 520px) calc(100vw - 5rem), (max-width: 900px) calc(50vw - 4rem), (max-width: 1200px) calc(25vw - 4rem), 17rem"
                   alt=""
-                  width="1200"
-                  height="800"
+                  width="1152"
+                  height="768"
                   loading="lazy"
                   decoding="async"
                 />
                 <img
                   class="product-preview-reflection"
-                  src="/products/collection-001/white-demon.webp"
                   alt=""
-                  width="1200"
-                  height="800"
+                  width="1152"
+                  height="768"
                   loading="lazy"
                   decoding="async"
+                  data-preview-reflection
                 />
                 <span class="product-preview-label">White / Demon</span>
               </div>
-            </div>
+              <span class="product-preview-hint" aria-hidden="true">
+                Tap to preview
+              </span>
+            </button>
             <h3>Rage Hoodie</h3>
             <p>Collection 001 · Four color and style options</p>
             <p class="product-availability is-available">Available now</p>
+            <div data-size-selector data-available-sizes="S,M,L,XL,XXL" aria-hidden="false"></div>
             <a class="panel-link" href="/collections/001"
               >Shop Collection 001 ↗</a
             >

@@ -32,11 +32,11 @@
           <form class="panel-card" method="POST" action="/signin">
             <label>
               Email
-              <input type="email" name="email" placeholder="you@example.com" />
+              <input id="signin-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" />
             </label>
             <label>
               Password
-              <input type="password" name="password" placeholder="Enter password" />
+              <input id="signin-password" type="password" name="password" autocomplete="current-password" placeholder="Enter password" aria-label="Password" />
             </label>
             <button type="submit">Continue</button>
           </form>

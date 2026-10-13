@@ -41,6 +41,27 @@ export type HoodieVariantId = keyof typeof hoodieVariantById;
 export type HoodieVariant = (typeof hoodieVariantById)[HoodieVariantId];
 export type HoodieColor = HoodieVariant['color'];
 export type HoodieStyle = HoodieVariant['style'];
+export const productSizeOptions = ['S', 'M', 'L', 'XL', 'XXL'] as const;
+export type ProductSize = (typeof productSizeOptions)[number];
+export type ProductMeasurement = {
+  label: string;
+  values: Readonly<Partial<Record<ProductSize, number>>>;
+};
+export type ProductSizing = {
+  options: readonly ProductSize[];
+  availability: Readonly<Partial<Record<ProductSize, 'available' | 'unavailable'>>> | null;
+  guide: {
+    unit: 'cm';
+    measurements: readonly ProductMeasurement[];
+  } | null;
+};
+
+const collection001Sizing: ProductSizing = {
+  options: productSizeOptions,
+  availability: null,
+  guide: null,
+};
+
 export const hoodieVariants = Object.values(hoodieVariantById);
 
 export const collection001Product = {
@@ -49,6 +70,7 @@ export const collection001Product = {
   name: 'Rage Hoodie',
   tagline: 'Wear the War. Earn the Peace.',
   variants: hoodieVariants,
+  sizing: collection001Sizing,
 };
 
 export const getHoodieVariant = (id: HoodieVariantId) => hoodieVariantById[id];
@@ -69,6 +91,10 @@ export const getHoodieVariantForOptions = (
 export const isHoodieVariantId = (value: unknown): value is HoodieVariantId =>
   typeof value === 'string' &&
   Object.prototype.hasOwnProperty.call(hoodieVariantById, value);
+
+export const isProductSize = (value: unknown): value is ProductSize =>
+  typeof value === 'string' &&
+  productSizeOptions.includes(value as ProductSize);
 
 export const formatPrice = (priceCents: number | bigint) => {
   const cents = BigInt(priceCents);
