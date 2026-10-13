@@ -34,7 +34,7 @@ export default function AccountPage({ email }: { email: string | null }) {
     <main className="account-page">
       <header className="account-header">
         <Link className="auth-brand" href="/" aria-label="PAIXX home">PAIXX</Link>
-        <Link className="account-shop-link" href="/collections/001">Continue shopping</Link>
+        <Link className="account-shop-link" href="/products">Continue shopping</Link>
       </header>
 
       <div className="account-dashboard">
@@ -68,7 +68,7 @@ export default function AccountPage({ email }: { email: string | null }) {
             <div className="account-empty-state">
               <h3>No order history yet</h3>
               <p>Order tracking will appear here once checkout is available.</p>
-              <Link className="auth-continue" href="/collections/001">Explore Collection 001</Link>
+              <Link className="auth-continue" href="/products">Browse all products</Link>
             </div>
           </section>
 
