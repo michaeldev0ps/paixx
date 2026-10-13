@@ -12,6 +12,7 @@ import {
   type HoodieStyle,
   type HoodieVariant,
 } from '../../data/collection-001';
+import AccountNavStatus from '../../components/account-nav-status';
 import {
   addCartItem,
   cartTotalCents,
@@ -158,6 +159,7 @@ export default function Collection001Page() {
         />
       </Head>
 
+      <AccountNavStatus />
       <main className={styles.page}>
         <header className={styles.header}>
           <Link className={styles.wordmark} href="/" aria-label="PAIXX home">
@@ -165,6 +167,7 @@ export default function Collection001Page() {
           </Link>
           <nav className={styles.navigation} aria-label="Main navigation">
             <Link href="/#collection-001">Collection 001</Link>
+            <Link data-account-nav href="/signin">Sign in</Link>
             <a
               className={styles.cartLink}
               href="#cart"

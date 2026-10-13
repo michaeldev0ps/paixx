@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Script from 'next/script';
+import AccountNavStatus from './account-nav-status';
 import type { StorefrontPageContent } from '../lib/storefront-pages';
 
 type StorefrontPageProps = StorefrontPageContent & {
@@ -13,9 +14,12 @@ export default function StorefrontPage({
   home,
   collection001 = false,
 }: StorefrontPageProps) {
-  let pageHtml = html;
+  let pageHtml = html.replace(
+    /<a\b(?=[^>]*\bhref=["']\/signin(?:[?#][^"']*)?["'])[^>]*>[\s\S]*?<\/a>/gi,
+    '<a href="/signin" data-account-nav>Sign in</a>',
+  );
   if (home && collection001) {
-    const footerPosition = html.toLowerCase().lastIndexOf('<footer');
+    const footerPosition = pageHtml.toLowerCase().lastIndexOf('<footer');
     if (footerPosition < 0) {
       throw new Error('The homepage is missing its footer.');
     }
@@ -30,7 +34,7 @@ export default function StorefrontPage({
         </a>
       </section>
     `;
-    pageHtml = `${html.slice(0, footerPosition)}${collectionPromo}${html.slice(footerPosition)}`;
+    pageHtml = `${pageHtml.slice(0, footerPosition)}${collectionPromo}${pageHtml.slice(footerPosition)}`;
   }
 
   return (
@@ -49,6 +53,7 @@ export default function StorefrontPage({
       <Script src="/static/js/gallery.js" strategy="afterInteractive" />
       {home && <Script src="/static/js/entrance.js" strategy="afterInteractive" />}
       <div dangerouslySetInnerHTML={{ __html: pageHtml }} />
+      <AccountNavStatus />
     </>
   );
 }

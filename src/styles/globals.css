@@ -232,6 +232,20 @@ input {
   outline-offset: 3px;
 }
 
+.profile-nav-link {
+  display: inline-flex;
+  min-width: 2rem;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-nav-icon {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
 .account-page {
   min-height: 100%;
   padding: 0 clamp(1.25rem, 5vw, 5rem) 4rem;

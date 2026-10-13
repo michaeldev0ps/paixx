@@ -10,6 +10,7 @@ import {
 } from '../../lib/supabase';
 
 type ApiResponse = {
+  authenticated?: boolean;
   message?: string;
   redirectTo?: string;
 };
@@ -59,8 +60,39 @@ export default async function authHandler(
   res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.setHeader('Pragma', 'no-cache');
 
+  if (req.method === 'GET') {
+    try {
+      const supabase = createSupabaseServerClient(req, res);
+      const { data, error } = await supabase.auth.getUser();
+
+      if (
+        error
+        && error.name !== 'AuthSessionMissingError'
+        && error.status !== 400
+        && error.status !== 401
+      ) {
+        logAuthFailure('navigation session check', error);
+        return res.status(503).json({ message: 'Unable to verify the account session.' });
+      }
+
+      return res.status(200).json({
+        authenticated: !error
+          && Boolean(data.user)
+          && isEmailConfirmed(data.user?.email_confirmed_at),
+      });
+    } catch (error) {
+      console.error(
+        'Supabase navigation session check could not be completed.',
+        error instanceof Error ? error.name : 'Unknown error',
+      );
+      return res.status(503).json({
+        message: 'The account service is temporarily unavailable. Please try again later.',
+      });
+    }
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ message: 'Method not allowed.' });
   }
   if (req.headers['content-type']?.split(';', 1)[0].trim() !== 'application/json') {
