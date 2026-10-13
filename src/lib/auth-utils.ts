@@ -19,6 +19,10 @@ export function getSafeReturnPath(value: unknown, fallback = '/account'): string
   return `${target.pathname}${target.search}${target.hash}`;
 }
 
+export function isEmailConfirmed(confirmedAt: unknown): boolean {
+  return typeof confirmedAt === 'string' && confirmedAt.length > 0;
+}
+
 export function isSameOriginRequest(
   origin: string | undefined,
   host: string | undefined,

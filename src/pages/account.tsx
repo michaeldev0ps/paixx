@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import type { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
+import { isEmailConfirmed } from '../lib/auth-utils';
 import { createSupabaseServerClient } from '../lib/supabase';
 
 export default function AccountPage({ email }: { email: string | null }) {
-  const router = useRouter();
   const [message, setMessage] = useState('');
   const [isSigningOut, setIsSigningOut] = useState(false);
 
@@ -23,7 +22,7 @@ export default function AccountPage({ email }: { email: string | null }) {
         setMessage(result.message ?? 'Unable to sign out right now. Please try again.');
         return;
       }
-      await router.replace(result.redirectTo ?? '/signin');
+      window.location.assign(result.redirectTo ?? '/signin');
     } catch {
       setMessage('Unable to reach the account service. Please try again.');
     } finally {
@@ -54,7 +53,7 @@ export const getServerSideProps: GetServerSideProps<{ email: string | null }> = 
 }) => {
   res.setHeader('Cache-Control', 'private, no-store, max-age=0');
   const supabase = createSupabaseServerClient(req, res);
-  const { data, error } = await supabase.auth.getClaims();
+  const { data, error } = await supabase.auth.getUser();
 
   if (error) {
     console.error('Account session verification failed', {
@@ -62,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<{ email: string | null }> = 
       status: error.status,
     });
   }
-  if (error || !data?.claims || data.claims.email_verified !== true) {
+  if (error || !data.user || !isEmailConfirmed(data.user.email_confirmed_at)) {
     return {
       redirect: {
         destination: '/signin?next=%2Faccount',
@@ -73,7 +72,7 @@ export const getServerSideProps: GetServerSideProps<{ email: string | null }> = 
 
   return {
     props: {
-      email: typeof data.claims.email === 'string' ? data.claims.email : null,
+      email: data.user.email ?? null,
     },
   };
 };

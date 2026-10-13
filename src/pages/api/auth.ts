@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { isSameOriginRequest, getSafeReturnPath } from '../../lib/auth-utils';
+import {
+  getSafeReturnPath,
+  isEmailConfirmed,
+  isSameOriginRequest,
+} from '../../lib/auth-utils';
 import {
   createSupabaseServerClient,
   getAuthCallbackUrl,
@@ -151,10 +155,10 @@ export default async function authHandler(
           return res.status(400).json({ message: 'Choose a password of at least 6 characters.' });
         }
 
-        const { data, error: claimsError } = await supabase.auth.getClaims();
-        if (claimsError || !data?.claims || data.claims.email_verified !== true) {
-          if (claimsError) {
-            logAuthFailure('password-update session check', claimsError);
+        const { data, error: userError } = await supabase.auth.getUser();
+        if (userError || !data.user || !isEmailConfirmed(data.user.email_confirmed_at)) {
+          if (userError) {
+            logAuthFailure('password-update session check', userError);
           }
           return res.status(401).json({ message: 'This password link is invalid or has expired. Request a new one and try again.' });
         }

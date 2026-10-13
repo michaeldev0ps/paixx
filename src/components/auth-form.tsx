@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 export type AuthMode =
   | 'signin'
@@ -53,7 +52,6 @@ export default function AuthForm({
   mode: AuthMode;
   next?: string;
 }) {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -86,7 +84,7 @@ export default function AuthForm({
       }
 
       if (result.redirectTo) {
-        await router.push(result.redirectTo);
+        window.location.assign(result.redirectTo);
         return;
       }
 

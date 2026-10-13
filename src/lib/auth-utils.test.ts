@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { getSafeReturnPath, isSameOriginRequest } from './auth-utils';
+import {
+  getSafeReturnPath,
+  isEmailConfirmed,
+  isSameOriginRequest,
+} from './auth-utils';
 
 describe('getSafeReturnPath', () => {
   it('preserves safe internal paths and their query strings', () => {
@@ -26,5 +30,17 @@ describe('isSameOriginRequest', () => {
     expect(isSameOriginRequest(undefined, 'localhost:3002', false)).toBe(false);
     expect(isSameOriginRequest('http://evil.example', 'localhost:3002', false)).toBe(false);
     expect(isSameOriginRequest('http://shop.example', 'shop.example', true)).toBe(false);
+  });
+});
+
+describe('isEmailConfirmed', () => {
+  it('accepts Supabase confirmed-at timestamps', () => {
+    expect(isEmailConfirmed('2026-10-13T07:00:00.000Z')).toBe(true);
+  });
+
+  it('rejects absent confirmation timestamps', () => {
+    expect(isEmailConfirmed(null)).toBe(false);
+    expect(isEmailConfirmed(undefined)).toBe(false);
+    expect(isEmailConfirmed('')).toBe(false);
   });
 });
